@@ -7,14 +7,13 @@ import * as http from "http";
 import  userRoutes  from "../routes/user.routes.js";
 import { connectDb } from "../db/dbConnection.js";
 import MongoStore from "connect-mongo";
-import  obj  from "../../config/config.js";
+import  obj  from "../config/config.js";
 import session, { Cookie } from "express-session";
 import { passportInitialize } from "../helpers/passportConfig.js";
 import passport from "passport";
 import { socketControllers } from "../helpers/socketControllers.js";
 const _filename = fileURLToPath(import.meta.url)
 const _dirname = dirname(_filename)
-
 
 
 

@@ -1,7 +1,9 @@
-import { allUserPer, createUserPer, loginPer } from "../../persistence/userData.js"
+
+import { allUserPer,createUserPer, loginPer  } from "../persistence/userData.js"
 
 
 export const allUserSer = () =>  {
+    
     return allUserPer()
 }
 

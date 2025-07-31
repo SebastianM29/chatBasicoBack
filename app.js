@@ -1,4 +1,4 @@
-import { Server } from "./dao/server.js";
+import { Server } from "./src/dao/server.js";
 
 
 const server = new Server()
