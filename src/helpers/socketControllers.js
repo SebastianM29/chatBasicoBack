@@ -44,7 +44,10 @@ export const socketControllers = (socket,io) => {
 
     socket.on('creatingMsg',msg => {
         console.log(msg);
-        io.emit('newMsg',msg)
+
+        const user =  connectedUsersManager.getUser(socket.id)
+
+        io.emit('newMsg',{user:user.nickname,msg})
     })
 
    socket.on('disconnect',() => {

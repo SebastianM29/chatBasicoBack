@@ -5,6 +5,7 @@ import path, { dirname } from "path";
 import { Server as SocketIoServer  } from "socket.io";
 import * as http from "http";
 import  userRoutes  from "../routes/user.routes.js";
+import  productsRoutes  from "../routes/products.routes.js";
 import { connectDb } from "../db/dbConnection.js";
 import MongoStore from "connect-mongo";
 import  obj  from "../config/config.js";
@@ -75,6 +76,7 @@ export class Server {
     
     routes(){
         this.app.use('/users',userRoutes)
+        this.app.use('/admin',productsRoutes)
     }
 
     configureSocket() {

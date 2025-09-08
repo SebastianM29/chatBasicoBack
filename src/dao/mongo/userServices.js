@@ -47,16 +47,24 @@ export class UserServices {
       
       }
 
-      const creating = await createHash(user.pass)
-      user.pass = creating
+      try {
+        const creating = await createHash(user.pass)
+        user.pass = creating
+        const variableQueNoExiste = undefined;
+        variableQueNoExiste.algunaPropiedad; // Esto lanzará un TypeError
+        console.log('creando usuario',variableQueNoExiste.algunaPropiedad·$)
+        const created = await User.ceate(user)
       
-      const created = await User.create(user)
-    
-      
-      return {
-        error:false,
-        data : created
+        
+        return {
+          error:false,
+          data : created
+        }
+        
+      } catch (error) {
+        throw new Error('error en la base de datos' + error)
       }
+
     }
 
     async log(email,pass) {
