@@ -53,7 +53,7 @@ export class UserServices {
         const variableQueNoExiste = undefined;
         variableQueNoExiste.algunaPropiedad; // Esto lanzará un TypeError
         console.log('creando usuario',variableQueNoExiste.algunaPropiedad·$)
-        const created = await User.ceate(user)
+        const created = await User.create(user)
       
         
         return {

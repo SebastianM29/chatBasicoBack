@@ -1,5 +1,5 @@
 import { request, response } from "express";
-import { addingProductSer, allProductSer, deleteProductSer } from "../services/productServices.js";
+import { addingProductSer, allProductSer, deleteProductSer, updateProdSer } from "../services/productServices.js";
 
 
  
@@ -72,5 +72,24 @@ export const deletProduct = async(req=request,res=response) => {
             msg:'internal error'
         })
         
+    }
+}
+
+export const updateProduct = async (req=request,res=response) => {
+    try {
+        const id = req.params.id
+        console.log(`el id es : ${id}, y el req.body es : ${JSON.stringify(req.body)}`);
+        const resp = await updateProdSer(id,req.body)
+        if (resp.error) {
+            return res.status(400).json({
+                msg:resp.msg
+            })
+        }
+        res.json(resp)
+        
+    } catch (error) {
+            res.status(500).json({
+            msg:'internal error'
+        })
     }
 }

@@ -1,4 +1,4 @@
-import { addingProductPer, allProductsPer, deleteProdPer } from "../persistence/productdata.js"
+import { addingProductPer, allProductsPer, deleteProdPer, updateProdPer } from "../persistence/productdata.js"
 
 
 
@@ -14,4 +14,8 @@ export const allProductSer = async () => {
 
 export const deleteProductSer = async(id) => {
     await deleteProdPer(id)
+}
+
+export const updateProdSer = async(id,prod) => {
+    return await updateProdPer(id,prod)
 }

@@ -92,5 +92,33 @@ export class ProductServices {
         
     }
 
+    async updateProducts(id,products){
+        if (!id || !products) {
+             return {
+                    error:true,
+                    msg:'no se encontro el producto'
+                }
+            
+        }
+        try {
+            
+            const dataUpd = await Product.findByIdAndUpdate(id,products,{new:true})
+            if (!dataUpd) {
+                return {
+                    error:true,
+                    msg:'no se encontro el producto'
+                }
+            }
+
+            return{
+                error:false,
+                data:dataUpd
+            }
+        } catch (error) {
+            throw new Error("Error actualizando el producto",error);
+            
+        }
+    }
+
 
 }

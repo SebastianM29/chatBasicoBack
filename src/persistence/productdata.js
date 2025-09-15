@@ -14,3 +14,7 @@ export const allProductsPer = async() => {
 export const deleteProdPer = async(id) => {
    return await products.deleteProduct(id)
 }
+
+export const updateProdPer = async (id,product) => {
+  return await products.updateProducts(id,product)
+}
