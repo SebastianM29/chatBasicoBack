@@ -73,7 +73,7 @@ export const socketControllers = (socket,io) => {
     console.log('llega el producto?',product);
     
     timeLeft = 120
-    currentAuction = {product,time:timeLeft}
+    currentAuction = {product,time:timeLeft,highestBid:0,highestBidder:null}
 
 
     io.emit('startR',currentAuction)
@@ -94,7 +94,9 @@ export const socketControllers = (socket,io) => {
         
       }
 
-    }, 1000);     
+    }, 1000); 
+
+    
    })
 
    socket.on('currentProduct',(cb) => {
@@ -102,6 +104,22 @@ export const socketControllers = (socket,io) => {
     cb( currentAuction? currentAuction : null)
     
   }
+   })
+
+   socket.on('makeBid',(bid) => {
+    console.log('llega la puja?',bid,'lo que hay',currentAuction);
+    console.log('llega la puja?',bid.amount,'lo que hay',currentAuction.highestBid);
+
+
+    if (currentAuction.highestBid < bid.amount && bid.amount > bid.product.price ) {
+        currentAuction.highestBid = bid.amount
+        const user = connectedUsersManager.getUser(socket.id)
+        currentAuction.highestBidder = user  
+        console.log('oferta mayor');
+        
+        io.emit('newBid',currentAuction)
+    }
+
    })
 
 
