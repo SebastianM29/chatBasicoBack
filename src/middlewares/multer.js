@@ -14,3 +14,11 @@ export const storageProducts = multer.diskStorage({
         cb(null,new Date().getTime() + path.extname(file.originalname))
     }
 })
+export const storageUsers = multer.diskStorage({
+    destination: function (req,res,cb) {
+        cb(null,path.join(_dirname,'../public/imgUser'))
+    },
+    filename: function (req,file,cb) {
+        cb(null,new Date().getTime() + path.extname(file.originalname))
+    }
+})

@@ -50,9 +50,7 @@ export class UserServices {
       try {
         const creating = await createHash(user.pass)
         user.pass = creating
-        const variableQueNoExiste = undefined;
-        variableQueNoExiste.algunaPropiedad; // Esto lanzará un TypeError
-        console.log('creando usuario',variableQueNoExiste.algunaPropiedad·$)
+
         const created = await User.create(user)
       
         

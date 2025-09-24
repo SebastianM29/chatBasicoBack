@@ -38,7 +38,7 @@ export const socketControllers = (socket,io) => {
 
                       socket.emit('validateUser',session.user)
                       io.emit('allUsers',connectedUsersManager.getUsers())
-                      io.emit('userConnected',{socket:socket.id,nickname:session.user.nickname})
+                      io.emit('userConnected',{socket:socket.id,user:session.user.nickname,imagePath:session.user.imagePath})
                     }
 
                 }
@@ -119,6 +119,12 @@ export const socketControllers = (socket,io) => {
         
         io.emit('newBid',currentAuction)
     }
+
+   })
+
+   socket.on('whoAmI', (cb) => {
+        const user = connectedUsersManager.getUser(socket.id)
+        cb(user ? user : null)
 
    })
 

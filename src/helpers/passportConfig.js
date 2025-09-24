@@ -18,8 +18,8 @@ export const passportInitialize = () => {
                     nickname:req.body.nickname,
                     email:username,
                     pass: password,
-                    imagePath:req.body.imagePath,
-                    created:req.body.created
+                    imagePath: 'imgUser/' + req.file.filename,
+                    created: new Date()
                     
                 }
                 const resp = await createUserSer(user)
