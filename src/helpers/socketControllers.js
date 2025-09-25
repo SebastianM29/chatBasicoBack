@@ -57,15 +57,21 @@ export const socketControllers = (socket,io) => {
    socket.on('disconnect',() => {
         connectedUsersManager.removeUser(socket.id)
         if (socket.request.session) {
-           socket.request.session.destroy()
+            socket.request.session.destroy()
         }
         io.emit('allUsers',connectedUsersManager.getUsers())  
      
    })
 
-   socket.on('logout',(id) => {
-    console.log('id que llega',id);
-    
+   socket.on('logout',() => {
+   
+         connectedUsersManager.removeUser(socket.id)
+
+        if (socket.request.session) {
+           socket.request.session.destroy()
+        }
+        io.emit('allUsers',connectedUsersManager.getUsers())  
+      
 
    })
 
@@ -124,7 +130,7 @@ export const socketControllers = (socket,io) => {
 
    socket.on('whoAmI', (cb) => {
         const user = connectedUsersManager.getUser(socket.id)
-        cb(user ? user : null)
+        cb({ user: user ? user : null, socketId: socket.id })
 
    })
 
