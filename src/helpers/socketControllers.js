@@ -1,4 +1,5 @@
 import { connectedUsersManager } from "../dao/connectedUsers.js";
+import { addPurchaseSer } from "../services/purchaseServices.js";
 import { loginSer } from "../services/userServices.js";
 
 let currentAuction = null;
@@ -75,10 +76,10 @@ export const socketControllers = (socket,io) => {
 
    })
 
-   socket.on('start',(product) => {
+   socket.on('start', (product) => {
     console.log('llega el producto?',product);
     
-    timeLeft = 120
+    timeLeft = 20
     currentAuction = {product,time:timeLeft,highestBid:0,highestBidder:null}
 
 
@@ -88,14 +89,18 @@ export const socketControllers = (socket,io) => {
         clearInterval(auctionTimer)
     }
 
-    auctionTimer = setInterval(() => {
+    auctionTimer = setInterval(async () => {
       timeLeft--
       io.emit('tick',{time:timeLeft})
 
       if (timeLeft <= 0) {
         clearInterval(auctionTimer)
         auctionTimer = null
-        io.emit('end',{product:currentAuction})
+        const resp = await addPurchaseSer(currentAuction)
+    
+        console.log('necesito saber q termina enviandoi siempre',resp);
+        
+        io.emit('end',{purchase:resp})
         currentAuction = null
         
       }
