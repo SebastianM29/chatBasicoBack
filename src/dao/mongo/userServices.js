@@ -1,4 +1,5 @@
 import { compare, createHash } from "../../helpers/hash.js";
+import { connectedUsersManager } from "../connectedUsers.js";
 import User from "../mongo/models/userModels.js";
 
 export class UserServices {
@@ -65,8 +66,33 @@ export class UserServices {
 
     }
 
-    async log(email,pass) {
+    async log(email,password) {
+      
+      
+    console.log('llega email y password', email,password);
+     const allNow = connectedUsersManager.getUsers()
+      console.log(typeof allNow);
+      
+     for (const element of allNow) {
+      console.log('deberia ver algo',element);
+      console.log('deberia ver algo y seria el email',email);
+      
+      if (element.email  === email) {
+        console.log('no deberia entrar al error');
+        
+      return{
+      error:true,
+      msg:'usuario ya conectado'
+    }
 
+      }  ;
+      
+      
+     }
+
+
+     console.log('usuarios conectados',allNow);
+     
      const finding = await User.findOne({email:email})
      if (!finding) {
       return{
@@ -74,10 +100,15 @@ export class UserServices {
         msg:'usuario no encontrado'
       }
      }
+    
+     console.log('usuario encontrado ',finding);
+     
 
-     const check = await compare(pass,finding)
+     const check = await compare(password,finding.pass)
      
      if (!check) {
+      console.log('entra a false');
+      
       return {
         error:true,
         msg:'contraseña incorrecta'

@@ -5,7 +5,7 @@ import path, { dirname } from "path";
 import { Server as SocketIoServer  } from "socket.io";
 import * as http from "http";
 import  userRoutes  from "../routes/user.routes.js";
-import  productsRoutes  from "../routes/products.routes.js";
+import  adminRoutes  from "../routes/admin.routes.js";
 import { connectDb } from "../db/dbConnection.js";
 import MongoStore from "connect-mongo";
 import  obj  from "../config/config.js";
@@ -44,16 +44,19 @@ export class Server {
         cookie: {
                maxAge: 24 *60 *60 * 1000,
                secure: false,
-               httpOnly:true
+               httpOnly:true,
+
+               sameSite: 'lax'
         }
     }
     
+    this.sessionMiddleware = session(this.configSession)
     // passportInitialize()
-    this.middlewares()
-    this.routes()
-    this.configureSocket()
-    this.socket()
     this.initializePassport()
+    this.middlewares()
+    this.configureSocket()
+    this.routes()
+    this.socket()
     this.connectingDB()
     
     }
@@ -63,9 +66,12 @@ export class Server {
         this.app.use(urlencoded({
             extended:true
         }))
-        this.app.use(cors())
+        this.app.use(cors({
+            origin:'http://localhost:5173',
+            credentials:true
+        }))
         
-        this.app.use(session(this.configSession))
+        this.app.use(this.sessionMiddleware)
         this.app.use(passport.initialize())
         this.app.use(passport.session())
 
@@ -76,12 +82,18 @@ export class Server {
     
     routes(){
         this.app.use('/users',userRoutes)
-        this.app.use('/admin',productsRoutes)
+        this.app.use('/admin',adminRoutes)
     }
 
     configureSocket() {
         const wrap = (middleware) => (socket,next) => middleware(socket.request,{},next)
-        this.io.use(wrap(session(this.configSession)))
+        this.io.use(wrap(this.sessionMiddleware))
+            // 2. APLICAR passport.initialize()
+        this.io.use(wrap(passport.initialize())); 
+
+        // 3. APLICAR passport.session()
+        this.io.use(wrap(passport.session())); // 👈 Esto añade req.logIn, req.isAuthenticated, etc.
+
     }
 
     socket(){

@@ -4,9 +4,12 @@ class ConnectedUsers {
         
     }
     addUser(socketId,user) {
-        console.log(`Aca veo el id ${socketId} , y el dato del usuario ${user}`);
+        console.log(user);
+        
+        console.log(`Aca veo el id ${socketId} , y el dato del usuario ${user.email}`);
         
         for (const element of this.users.values()) {
+            console.log('pasando por el map',element.email);
             
             if (element.email === user.email) {
                 return {
@@ -18,6 +21,8 @@ class ConnectedUsers {
         }
         
         this.users.set(socketId, user);
+        console.log('que quedaria en this.users',this.users);
+        
         return {
             error: false,
         }

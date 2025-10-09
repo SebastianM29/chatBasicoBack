@@ -1,6 +1,7 @@
 import { connectedUsersManager } from "../dao/connectedUsers.js";
 import { addPurchaseSer } from "../services/purchaseServices.js";
 import { loginSer } from "../services/userServices.js";
+import passport from 'passport';
 
 let currentAuction = null;
 let auctionTimer = null;
@@ -16,50 +17,44 @@ export const socketControllers = (socket,io) => {
 
     // }
 
-              socket.on('sendUser',async(obj) => {
+    // socketControllers.js
+socket.on('sendUser', async (obj) => {
+  console.log(obj.email, obj)
+  
 
-                  console.log(obj.email,obj.password);
-                  const resp = await loginSer(obj.email,obj.password)
 
-                if (resp.error) {
+     // Tu lógica actual
+      const respUser = connectedUsersManager.addUser(socket.id,obj)
+      if (respUser.error) {
+        socket.emit('validateUser', respUser.msg)
+      } else {
+        socket.emit('validateUser', obj)
+        io.emit('allUsers', connectedUsersManager.getUsers())
+        io.emit('userConnected', {
+          socket: socket.id,
+          user: obj.nickname,
+          imagePath: obj.imagePath
+        })
+      }
+  
+  
+ 
+ 
 
-                  socket.emit('validateUser',resp.msg)
-
-              }else{
-
-                  const session = socket.request.session
-                  session.user =  resp.data
-                  session.save()
-
-                  const respUser = connectedUsersManager.addUser(socket.id,resp.data)
-                    
-                  if (respUser.error) {
-                      socket.emit('validateUser',respUser.msg)
-                    }else{
-
-                      socket.emit('validateUser',session.user)
-                      io.emit('allUsers',connectedUsersManager.getUsers())
-                      io.emit('userConnected',{socket:socket.id,user:session.user.nickname,imagePath:session.user.imagePath})
-                    }
-
-                }
-
-                
-              })
+})
 
     socket.on('creatingMsg',msg => {
         console.log(msg);
 
         const user =  connectedUsersManager.getUser(socket.id)
-
+        console.log('usuario !!!logueado', socket.request.session);
+        
         io.emit('newMsg',{user:user.nickname,msg})
     })
 
    socket.on('disconnect',() => {
         connectedUsersManager.removeUser(socket.id)
-        if (socket.request.session) {
-            socket.request.session.destroy()
-        }
+     
         io.emit('allUsers',connectedUsersManager.getUsers())  
      
    })

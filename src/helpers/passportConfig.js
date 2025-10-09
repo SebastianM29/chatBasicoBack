@@ -50,9 +50,10 @@ export const passportInitialize = () => {
     passport.use('login', new Strategy({
            passReqToCallback:true,
            usernameField:'email',
-          passwordField:'pass'
+          passwordField:'password'
           },async(req,username,password,done) => {
           try {
+            
             
             
             const resp = await loginSer(username,password)
@@ -64,7 +65,8 @@ export const passportInitialize = () => {
                 return done(null,false,{msg:resp.msg})
                 
             }
-
+              console.log('aca passport lo usa');
+              
             return done(null,resp.data)
 
          } catch (error) {
@@ -77,12 +79,43 @@ export const passportInitialize = () => {
 
 
     passport.serializeUser((user,done) => {
-        done(null,user.id)
+        done(null,{
+            id:user._id.toString(),
+            email:user.email,
+
+        
+        
+        
+        
+        })
 
     })
 
-    passport.deserializeUser(async(id,done) => {
-        const finding = await Users.findById(id)
-        done(null,finding)
+    //  name: req.body.name,
+    //                 nickname:req.body.nickname,
+    //                 email:username,
+    //                 pass: password,
+    //                 imagePath: 'imgUser/' + req.file.filename,
+    //                 created: new Date()
+
+    passport.deserializeUser(async(user,done) => {
+          // 🚨 DEBUG: Mira si se llama y qué ID busca
+    console.log('--- DESERIALIZACIÓN INICIADA ---');
+    console.log('ID que Passport está buscando:', user.id); 
+
+    try {
+        const finding = await Users.findById(user.id);
+
+        if (!finding) {
+            console.log('🔴 ERROR: Usuario NO encontrado en la DB con ID:', user.id);
+            return done(null, false); // Esto resulta en el 401
+        }
+        
+        console.log('🟢 ÉXITO: Usuario encontrado y deserializado:', finding.email);
+        done(null, finding);
+    } catch (error) {
+        console.error('🔴 ERROR CRÍTICO en la DB durante deserialización:', error);
+        done(error);
+    }
     })
 }

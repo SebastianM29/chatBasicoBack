@@ -3,14 +3,19 @@ import { allUserSer, createUserSer } from "../services/userServices.js";
 
 
 export const allUser = async(req=request,res=response) => {
+    console.log('no esta llegando a la ruta');
+    
 const all = await allUserSer()
 if (all.error) {
     console.log(`${all.msg}`);
+    return res.status(400).json({
+            msg:all.msg
+    })
     
 }
 
 return res.json({
-    msg:'todos los usuarios'
+    users : all
 })
 }
 
@@ -52,6 +57,24 @@ try {
 }
               
 }
+
+ export const login = async(req=request,res=response) => {
+    try {
+        if (req.userError) {
+            console.log('HAY UM ERROR FINAl?');
+            
+             return res.status(400).json({msg:req.userError})
+        }
+        console.log('se logueo y este es el req.user',req.user,req.session);
+        
+        return res.json(req.user)
+    } catch (error) {
+        throw new Error(error.message);
+        
+    }
+
+
+ }
 
 
 
