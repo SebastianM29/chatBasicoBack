@@ -21,9 +21,23 @@ export class UserServices {
     }
 
     async createUser(user) {
-     
+       console.log('ubicacion del usuario', user);
+       user.location = JSON.parse(user.location)
+       
+      user.email = user.email?.trim().toLowerCase()
       
-      if (![user.name,user.nickname,user.email,user.pass,user.imagePath,user.created].every(Boolean)) {
+      if (![user.name,
+            user.nickname,
+            user.email,
+            user.pass,
+            user.imagePath,
+            user.address,
+            user.city,
+            user.province,
+            user.location
+          
+          ]
+            .every(Boolean)) {
         console.log(user);
         
          return {

@@ -28,13 +28,41 @@ const userSchema = new Schema ({
         enum:['user','admin']
 
     },
-    created: {
+    address:{
         type:String,
-        required:true
+    },
+    city:{
+        type:String,
+    },
+    province:{
+        type:String,
+    },
+    country:{
+        type:String,
+    },
+
+    location:{
+        type:{
+            type:String,
+            enum:['Point'],
+            default:'Point'
+        },
+        coordinates:{
+            type:[Number], // [Longitud, Latitud]
+            default:undefined
+        }
+
+    },
+
+    created: {
+        type:Date,
+        default:Date.now
     },
 
 
-})
+},{timestamps:false}
+
+)
 
 
 

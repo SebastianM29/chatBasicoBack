@@ -18,6 +18,11 @@ export const passportInitialize = () => {
                     nickname:req.body.nickname,
                     email:username,
                     pass: password,
+                    city:req.body.ciudad,
+                    province:req.body.provincia,
+                    country:req.body.pais,
+                    address:req.body.direccion,
+                    location:req.body.location,
                     imagePath: 'imgUser/' + req.file.filename,
                     created: new Date()
                     

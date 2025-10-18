@@ -1,9 +1,10 @@
 import { request, response } from "express";
 import { allUserSer, createUserSer } from "../services/userServices.js";
+import { getMonthlySeriesForChartSer } from "../services/purchaseServices.js";
 
 
 export const allUser = async(req=request,res=response) => {
-    console.log('no esta llegando a la ruta');
+   
     
 const all = await allUserSer()
 if (all.error) {
@@ -76,5 +77,19 @@ try {
 
  }
 
+ export const monthSales = async(req=request,res=response) => {
+    try {
 
+        
+        const  id  = req.params.id;
+        const  year  = req.params.year;
+        console.log('llegando a las ventas mensuales',id,year);
 
+       const sales = await getMonthlySeriesForChartSer(id, { year });
+       console.log('lo que me devolveria sales',sales);
+       
+       return res.json(sales);
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
