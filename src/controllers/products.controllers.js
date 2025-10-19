@@ -19,7 +19,7 @@ export const add = async (req=request,res=response)  => {
                 msg:resp.msg 
             })
         }
-        console.log('estoy recibiendo esto',resp.data);
+        // console.log('estoy recibiendo esto',resp.data);
         
         res.json(resp.data)
         
