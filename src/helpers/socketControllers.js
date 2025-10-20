@@ -10,14 +10,9 @@ let timeLeft = 0;
 export const socketControllers = (socket,io) => {
     
     socket.emit('actualUser',socket.id)
-    // if (socket.request.session?.user) {
 
-    // socket.emit('allUsers', connectedUsersManager.getUsers());
-    //     socket.emit('validateUser',socket.request.session.user)
 
-    // }
-
-    // socketControllers.js
+  
 socket.on('sendUser', async (obj) => {
   console.log(obj.email, obj)
   
