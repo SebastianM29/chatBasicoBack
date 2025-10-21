@@ -93,3 +93,13 @@ try {
         throw new Error(error.message);
     }
 }
+
+export const editProfileUser = async(req=request,res=response) => {
+    try {
+        const id = req.params._id
+        const {dataEdit} = req.body
+    } catch (error) {
+        throw new Error(error.message || 'Error al Editar');
+        
+    }
+}
