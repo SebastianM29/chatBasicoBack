@@ -1,5 +1,5 @@
 
-import { allUserPer,createUserPer, loginPer  } from "../persistence/userData.js"
+import { allUserPer,createUserPer, editProfilePer, loginPer  } from "../persistence/userData.js"
 
 
 export const allUserSer = () =>  {
@@ -13,4 +13,8 @@ export const createUserSer = async (user) => {
 
 export const loginSer = async(email,pass) => {
         return loginPer(email,pass)
+}
+
+export const editProfileSer = async(id,dataEdit) => {
+return await editProfilePer(id,dataEdit)
 }

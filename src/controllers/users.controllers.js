@@ -1,5 +1,5 @@
 import { request, response } from "express";
-import { allUserSer, createUserSer } from "../services/userServices.js";
+import { allUserSer, createUserSer, editProfileSer } from "../services/userServices.js";
 import { getMonthlySeriesForChartSer } from "../services/purchaseServices.js";
 
 
@@ -66,9 +66,11 @@ try {
             
              return res.status(400).json({msg:req.userError})
         }
-        console.log('se logueo y este es el req.user',req.user,req.session);
+        console.log('se logueo y este es el req.user',req.user);
+        const {pass, ...userFiltered} = req.user
+        console.log('que quedaria en userFiltered',userFiltered);
         
-        return res.json(req.user)
+        return res.json(userFiltered._doc)
     } catch (error) {
         throw new Error(error.message);
         
@@ -96,8 +98,24 @@ try {
 
 export const editProfileUser = async(req=request,res=response) => {
     try {
-        const id = req.params._id
-        const {dataEdit} = req.body
+        const id = req.params.id
+        const dataEdit = req.body
+        console.log('viendo ',id,dataEdit);
+        const resp = await editProfileSer(id,dataEdit)
+
+        if (resp.error) {
+            
+            
+            return res.status(400).json({
+                msg:resp.msg
+            })
+        }
+
+        res.json({
+            msg:'perfil editado',
+            data:resp.data
+        })
+        
     } catch (error) {
         throw new Error(error.message || 'Error al Editar');
         

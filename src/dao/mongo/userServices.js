@@ -6,6 +6,24 @@ export class UserServices {
     constructor() {
 
     }
+    _checkingFieldsToEdit (data) {
+           const checkToField = ['name','nickname','address','city','province','country']
+           return checkToField.some( field => 
+           {
+             const value = data[field] 
+             if (value === null || value === undefined) {
+              return true
+             }
+
+             
+             
+             return String(value).trim() === '' 
+
+           }
+          )
+            
+    }
+
 
     async findAll() {
       const all = await User.find()
@@ -133,5 +151,33 @@ export class UserServices {
       data:finding
      }
 
+    }
+
+
+    //Check
+    async editProfile(id,dataEdit) {
+      console.log('viendo el dato a editar',dataEdit);
+      
+     const hasEmptyFields = this._checkingFieldsToEdit(dataEdit)
+    if(hasEmptyFields) {
+      return {
+        error:true,
+        msg:'no se permiten campos vacios'
+      }
+    }
+    try {
+      
+      const resp =  await User.findByIdAndUpdate(id,dataEdit,{new:true})
+      return {
+        error:false,
+        data:resp
+      }
+      
+    } catch (error) {
+
+      throw new Error("error al actualizar",error.message);
+   
+    }
+     
     }
 }

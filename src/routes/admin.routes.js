@@ -8,7 +8,7 @@ import { isAuthenticated } from "../middlewares/isAuthenticated.js";
 const router = Router()
 const uploadProducts = multer({storage:storageProducts})
 router.get('/allUser',isAuthenticated,allUser)
-router.put('editProfileUser/:id',isAuthenticated,editProfileUser)
+router.put('/editProfileUser/:id',isAuthenticated,editProfileUser)
 
 
 

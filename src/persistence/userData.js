@@ -14,3 +14,7 @@ export const createUserPer = async (us) => {
 export const loginPer = async(email,pass) => {
     return await user.log(email,pass)
 }
+
+export const editProfilePer = async(id,dataEdit) => {
+    return await user.editProfile(id,dataEdit)
+}
