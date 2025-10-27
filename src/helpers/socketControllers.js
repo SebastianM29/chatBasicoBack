@@ -69,7 +69,7 @@ socket.on('sendUser', async (obj) => {
    socket.on('start', (product) => {
     console.log('llega el producto?',product);
     
-    timeLeft = 20
+    timeLeft = 30
     currentAuction = {product,time:timeLeft,highestBid:0,highestBidder:null}
 
 
@@ -125,7 +125,8 @@ socket.on('sendUser', async (obj) => {
 
    socket.on('whoAmI', (cb) => {
         const user = connectedUsersManager.getUser(socket.id)
-        cb({ user: user ? user : null, socketId: socket.id })
+        const {pass,...filtereduSer} = user
+        cb({ user: filtereduSer ? filtereduSer : null, socketId: socket.id })
 
    })
 

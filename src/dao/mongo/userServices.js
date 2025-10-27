@@ -180,4 +180,19 @@ export class UserServices {
     }
      
     }
+
+    async deleteUser(id) {
+      
+      
+      try {
+        await User.findByIdAndDelete(id)
+        return {
+          error:false,
+          msg:'usuario eliminado'
+        }
+      } catch (error) {
+        throw Error(error.message);
+        
+      }
+    }
 }

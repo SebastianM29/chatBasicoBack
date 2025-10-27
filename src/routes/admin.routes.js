@@ -2,13 +2,14 @@ import { Router } from "express";
 import { add, allProducts, deletProduct, updateProduct } from "../controllers/products.controllers.js";
 import multer from "multer";
 import { storageProducts } from "../middlewares/multer.js";
-import { allUser, editProfileUser, monthSales } from "../controllers/users.controllers.js";
+import { allUser, deleteUser, editProfileUser, monthSales } from "../controllers/users.controllers.js";
 import { isAuthenticated } from "../middlewares/isAuthenticated.js";
 
 const router = Router()
 const uploadProducts = multer({storage:storageProducts})
 router.get('/allUser',isAuthenticated,allUser)
 router.put('/editProfileUser/:id',isAuthenticated,editProfileUser)
+router.delete('/deleteUser/:id',isAuthenticated,deleteUser)
 
 
 

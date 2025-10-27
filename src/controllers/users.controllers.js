@@ -1,5 +1,5 @@
 import { request, response } from "express";
-import { allUserSer, createUserSer, editProfileSer } from "../services/userServices.js";
+import { allUserSer, createUserSer, deleteUserSer, editProfileSer } from "../services/userServices.js";
 import { getMonthlySeriesForChartSer } from "../services/purchaseServices.js";
 
 
@@ -120,4 +120,22 @@ export const editProfileUser = async(req=request,res=response) => {
         throw new Error(error.message || 'Error al Editar');
         
     }
+}
+
+
+export const deleteUser = async (req=request,res=response) => {
+    try {
+        const id =  req.params.id
+        console.log('viendo el id',id);
+        await deleteUserSer(id)
+        res.json({
+            msg:'usuario eliminado'
+        })
+        
+    } catch (error) {
+        
+        
+        throw new Error(error.message || 'Error se Servidor al eliminar usuario');
+    }
+
 }
