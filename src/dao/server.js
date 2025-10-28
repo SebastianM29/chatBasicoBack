@@ -27,7 +27,7 @@ export class Server {
 
     this.io = new SocketIoServer(this.httpServer,{
         cors:{
-            origin:["http://localhost:5173"],
+            origin:["http://localhost:5173",this.VERCEL],
             
             credentials:true,
             methods:["GET","POST"]
@@ -69,7 +69,7 @@ export class Server {
             extended:true
         }))
         this.app.use(cors({
-            origin:['http://localhost:5173'],
+            origin:['http://localhost:5173',this.VERCEL],
             credentials:true
         }))
         
