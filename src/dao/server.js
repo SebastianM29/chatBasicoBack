@@ -48,7 +48,7 @@ export class Server {
                secure: true,
                httpOnly:true,
 
-               sameSite: 'lax'
+               sameSite: 'none'
         }
     }
     
@@ -112,9 +112,9 @@ export class Server {
     }
 
     listen(){
-        this.httpServer.listen(3000, () => {
-            console.log('conectado');
-            
+        const PORT = process.env.PORT || 3000;
+        this.httpServer.listen(PORT, () => {
+            console.log(`conectado en el puerto ${PORT}`);
         })
     }
 
