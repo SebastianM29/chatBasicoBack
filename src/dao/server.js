@@ -24,7 +24,7 @@ export class Server {
     this.app = express()
     this.httpServer = http.createServer(this.app)
     this.VERCEL =  "https://rematesargentina.vercel.app"
-
+    this.isProduction = process.env.NODE_ENV === 'production' 
     this.io = new SocketIoServer(this.httpServer,{
         cors:{
             origin:["http://localhost:5173",this.VERCEL],
@@ -45,10 +45,10 @@ export class Server {
         saveUninitialized:false,
         cookie: {
                maxAge: 24 *60 *60 * 1000,
-               secure: false,
-               httpOnly:true,
+               secure: this.isProduction,
+               sameSite: this.isProduction ?'none' :'lax',
+               httpOnly:true
 
-               sameSite: 'lax'
         }
     }
     
