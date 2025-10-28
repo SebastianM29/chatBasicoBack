@@ -23,6 +23,8 @@ export class Server {
     
     this.VERCEL =  "https://rematesargentina.vercel.app"
     this.isProduction = process.env.NODE_ENV === 'production' 
+    console.log('necesito ver q valor tiene en la clase server el inicio',process.env.NODE_ENV);
+    
     this.app = express()
     // justo después de crear this.app
     if (this.isProduction) {
