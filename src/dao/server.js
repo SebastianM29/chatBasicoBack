@@ -69,7 +69,7 @@ export class Server {
             extended:true
         }))
         this.app.use(cors({
-            origin:['http://localhost:5173',this.VERCEL],
+            origin:['http://localhost:5173', 'https://rematesargentina.vercel.app'],
             credentials:true
         }))
         
