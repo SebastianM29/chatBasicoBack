@@ -23,10 +23,12 @@ export class Server {
     
     this.app = express()
     this.httpServer = http.createServer(this.app)
+    this.VERCEL =  "https://rematesargentina.vercel.app"
 
     this.io = new SocketIoServer(this.httpServer,{
         cors:{
-            origin:["http://localhost:5173"],
+            origin:["http://localhost:5173",
+            this.VERCEL],
             credentials:true,
             methods:["GET","POST"]
         }
@@ -43,7 +45,7 @@ export class Server {
         saveUninitialized:false,
         cookie: {
                maxAge: 24 *60 *60 * 1000,
-               secure: false,
+               secure: true,
                httpOnly:true,
 
                sameSite: 'lax'
@@ -67,7 +69,7 @@ export class Server {
             extended:true
         }))
         this.app.use(cors({
-            origin:'http://localhost:5173',
+            origin:['http://localhost:5173',this.VERCEL],
             credentials:true
         }))
         

@@ -182,6 +182,13 @@ export class UserServices {
     }
 
     async deleteUser(id) {
+      const finding = await User.findById(id)
+      if (!finding) {
+        return {
+          error:true,
+          msg:'usuario no encontrado'
+        }
+      }
       
       
       try {
