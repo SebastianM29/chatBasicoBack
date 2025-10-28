@@ -21,10 +21,14 @@ const _dirname = dirname(_filename)
 export class Server {
     constructor(){
     
-    this.app = express()
-    this.httpServer = http.createServer(this.app)
     this.VERCEL =  "https://rematesargentina.vercel.app"
     this.isProduction = process.env.NODE_ENV === 'production' 
+    this.app = express()
+    // justo después de crear this.app
+    if (this.isProduction) {
+    this.app.set('trust proxy', 1); // importante para que secure cookies funcionen detrás de proxies (Render, Heroku, etc.)
+}
+    this.httpServer = http.createServer(this.app)
     this.io = new SocketIoServer(this.httpServer,{
         cors:{
             origin:["http://localhost:5173",this.VERCEL],
@@ -62,6 +66,7 @@ export class Server {
     this.connectingDB()
     
     }
+    
 
     middlewares() {
         this.app.use(express.json())
