@@ -4,6 +4,9 @@ export const authRegister = (Strategy) => {
 
     return (req,res,next) => {
          passport.authenticate(Strategy,(err,user,info) => {
+
+            console.log('que deberia llegar a este lugar, Estoy desde el middleware authRegister',user);
+            
             if (err) {
                 console.log("pasa por err");
                 
