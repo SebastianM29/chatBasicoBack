@@ -67,10 +67,10 @@ try {
              return res.status(400).json({msg:req.userError})
         }
         console.log('se logueo y este es el req.user',req.user);
-        const {pass, ...userFiltered} = req.user
+        const {pass, ...userFiltered} = req.user._doc
         console.log('que quedaria en userFiltered',userFiltered);
-        
-        return res.json(userFiltered._doc)
+
+        return res.json(userFiltered)
     } catch (error) {
         throw new Error(error.message);
         
@@ -138,4 +138,44 @@ export const deleteUser = async (req=request,res=response) => {
         throw new Error(error.message || 'Error se Servidor al eliminar usuario');
     }
 
+}
+
+export const logout = async(req=request,res=response) => {
+    try {
+        //limpieza de passport -req.user y req.session.passport
+        req.logOut(function(err) {
+            if (err) {
+                return res.status(500).json({
+                    msg:'Error al cerrar sesion',
+                    error:err
+                })
+            }
+
+        //Borra el regustro de store
+            req.session.destroy(function(err) {
+                if (err) {
+                      return res.status(500).json({
+                    msg:'Error al destruir sesion',
+                    error:err
+                })
+                }
+
+
+
+            })
+        })
+        //  Borrar la Cookie del Navegador
+            res.clearCookie('connect.sid', { 
+                
+                secure: process.env.NODE_ENV === 'production', 
+                sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+            });
+
+        return res.status(200).json({ msg: 'Sesión cerrada exitosamente.' })
+        
+    } catch (error) {
+
+        throw new Error(error.message || 'Error al cerrar sesion');
+        
+    }
 }

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { allUser, createUser, login } from "../controllers/users.controllers.js";
+import { allUser, createUser, login, logout } from "../controllers/users.controllers.js";
 import { authRegister } from "../middlewares/authRegister.js";
 
 import multer from "multer";
@@ -11,5 +11,7 @@ const uploadUser = multer({storage:storageUsers})
 
 router.post('/createUser',uploadUser.single('imagePath'),authRegister('register'),createUser)
 router.post('/login',authRegister('login'),login)
+router.post('/logout',logout)
+
 
 export default router

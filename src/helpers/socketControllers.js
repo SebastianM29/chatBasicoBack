@@ -58,9 +58,7 @@ socket.on('sendUser', async (obj) => {
    
          connectedUsersManager.removeUser(socket.id)
 
-        if (socket.request.session) {
-           socket.request.session.destroy()
-        }
+       
         io.emit('allUsers',connectedUsersManager.getUsers())  
       
 
