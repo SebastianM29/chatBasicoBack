@@ -50,10 +50,11 @@ export class Server {
         resave:false,
         saveUninitialized:false,
         cookie: {
-               maxAge: 24 *60 *60 * 1000,
-               secure: this.isProduction,
-               sameSite: this.isProduction ?'none' :'lax',
-               httpOnly:true
+            secure: this.isProduction,
+            sameSite: this.isProduction ?'none' :'lax',
+            maxAge: 24 *60 *60 * 1000,
+            httpOnly:true,
+            path:'/'
 
         }
     }

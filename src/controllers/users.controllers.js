@@ -170,6 +170,7 @@ export const logout = (req=request,res=response) => {
                         
                         secure: process.env.NODE_ENV === 'production', 
                         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+                        maxAge: 24 *60 *60 * 1000,
                         httpOnly: true, // 👈 ¡AGREGA ESTO!
                         path: '/' // Agregar el path por defecto también es buena práctica
                     });
