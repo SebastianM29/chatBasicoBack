@@ -145,6 +145,8 @@ export const logout = async(req=request,res=response) => {
         //limpieza de passport -req.user y req.session.passport
         req.logOut(function(err) {
             if (err) {
+                console.log('error al borrar passport', err);
+                
                 return res.status(500).json({
                     msg:'Error al cerrar sesion',
                     error:err
@@ -154,6 +156,7 @@ export const logout = async(req=request,res=response) => {
         //Borra el regustro de store
             req.session.destroy(function(err) {
                 if (err) {
+                    console.log('error al destruir sesion', err);
                       return res.status(500).json({
                     msg:'Error al destruir sesion',
                     error:err
