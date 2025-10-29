@@ -140,7 +140,7 @@ export const deleteUser = async (req=request,res=response) => {
 
 }
 
-export const logout = async(req=request,res=response) => {
+export const logout = (req=request,res=response) => {
     try {
         //limpieza de passport -req.user y req.session.passport
         req.logOut(function(err) {
