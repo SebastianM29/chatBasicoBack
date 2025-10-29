@@ -164,19 +164,19 @@ export const logout = (req=request,res=response) => {
                 }
 
 
+                console.log( 'necesito ver el valor de node_env', process.env.NODE_ENV);
+                
+                    res.clearCookie('connect.sid', { 
+                        
+                        secure: process.env.NODE_ENV === 'production', 
+                        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+                    });
+        
+                return res.status(200).json({ msg: 'Sesión cerrada exitosamente.' })
 
             })
         })
         //  Borrar la Cookie del Navegador
-        console.log( 'necesito ver el valor de node_env', process.env.NODE_ENV);
-        
-            res.clearCookie('connect.sid', { 
-                
-                secure: process.env.NODE_ENV === 'production', 
-                sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
-            });
-
-        return res.status(200).json({ msg: 'Sesión cerrada exitosamente.' })
         
     } catch (error) {
 

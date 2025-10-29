@@ -29,7 +29,7 @@ export class Server {
     // justo después de crear this.app
     if (this.isProduction) {
     this.app.set('trust proxy', 1); // importante para que secure cookies funcionen detrás de proxies (Render, Heroku, etc.)
-}
+     }
     this.httpServer = http.createServer(this.app)
     this.io = new SocketIoServer(this.httpServer,{
         cors:{
