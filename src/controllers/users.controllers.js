@@ -165,6 +165,8 @@ export const logout = async(req=request,res=response) => {
             })
         })
         //  Borrar la Cookie del Navegador
+        console.log( 'necesito ver el valor de node_env', process.env.NODE_ENV);
+        
             res.clearCookie('connect.sid', { 
                 
                 secure: process.env.NODE_ENV === 'production', 
