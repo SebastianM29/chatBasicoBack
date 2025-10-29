@@ -140,47 +140,92 @@ export const deleteUser = async (req=request,res=response) => {
 
 }
 
-export const logout = (req=request,res=response) => {
-    try {
-        //limpieza de passport -req.user y req.session.passport
-        req.logOut(function(err) {
-            if (err) {
-                console.log('error al borrar passport', err);
+// export const logout = (req=request,res=response) => {
+//     try {
+//         //limpieza de passport -req.user y req.session.passport
+//         req.logOut(function(err) {
+//             if (err) {
+//                 console.log('error al borrar passport', err);
                 
-                return res.status(500).json({
-                    msg:'Error al cerrar sesion',
-                    error:err
-                })
-            }
+//                 return res.status(500).json({
+//                     msg:'Error al cerrar sesion',
+//                     error:err
+//                 })
+//             }
 
-        //Borra el regustro de store
-            req.session.destroy(function(err) {
-                if (err) {
-                    console.log('error al destruir sesion', err);
-                      return res.status(500).json({
-                    msg:'Error al destruir sesion',
-                    error:err
-                })
-                }
+//         //Borra el regustro de store
+//             req.session.destroy(function(err) {
+//                 if (err) {
+//                     console.log('error al destruir sesion', err);
+//                       return res.status(500).json({
+//                     msg:'Error al destruir sesion',
+//                     error:err
+//                 })
+//                 }
 
 
-                console.log( 'necesito ver el valor de node_env', process.env.NODE_ENV);
+//                 console.log( 'necesito ver el valor de node_env', process.env.NODE_ENV);
                 
-                    res.clearCookie('connect.sid', { 
+//                     res.clearCookie('connect.sid', { 
                         
-                        secure: process.env.NODE_ENV === 'production', 
-                        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
-                    });
+//                         secure: process.env.NODE_ENV === 'production', 
+//                         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+//                     });
         
-                return res.status(200).json({ msg: 'Sesión cerrada exitosamente.' })
+//                 return res.status(200).json({ msg: 'Sesión cerrada exitosamente.' })
 
-            })
-        })
-        //  Borrar la Cookie del Navegador
+//             })
+//         })
+//         //  Borrar la Cookie del Navegador
         
-    } catch (error) {
+//     } catch (error) {
 
-        throw new Error(error.message || 'Error al cerrar sesion');
+//         throw new Error(error.message || 'Error al cerrar sesion');
         
+//     }
+// }
+
+
+
+import { promisify } from 'util';
+
+export const logout = async (req = request, res = response) => {
+  try {
+    // 1) Asegurarse que req.logOut se complete (Passport >=0.6 usa callback)
+    await new Promise((resolve, reject) => {
+      req.logOut(function(err) {
+        if (err) {
+          console.error('error al borrar passport', err);
+          return reject(err);
+        }
+        resolve();
+      });
+    });
+
+    // 2) Destruir la sesión en el store (promisify para usar await)
+    const destroyAsync = promisify(req.session.destroy).bind(req.session);
+    try {
+      await destroyAsync();
+    } catch (err) {
+      console.error('error al destruir session:', err);
+      return res.status(500).json({ msg: 'Error al destruir sesion', error: err });
     }
-}
+
+    // 3) Limpiar la cookie en la respuesta. IMPORTANTE: usar los mismos atributos
+    // que usaste al crearla (secure, sameSite, path, domain si aplica).
+    const cookieOptions = {
+      path: '/', 
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+      // domain: 'rematesargentina.vercel.app' // <- añadir sólo si la cookie fue creada con domain
+    };
+
+    res.clearCookie('connect.sid', cookieOptions);
+
+    return res.status(200).json({ msg: 'Sesión cerrada exitosamente.' });
+  } catch (error) {
+    console.error('logout error general', error);
+    return res.status(500).json({ msg: 'Error al cerrar sesion', error });
+  }
+};
