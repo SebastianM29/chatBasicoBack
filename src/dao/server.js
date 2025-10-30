@@ -28,7 +28,7 @@ export class Server {
     this.app = express()
     // justo después de crear this.app
     if (this.isProduction) {
-    this.app.set('trust proxy', true); // importante para que secure cookies funcionen detrás de proxies (Render, Heroku, etc.)
+    this.app.set('trust proxy', 1); // importante para que secure cookies funcionen detrás de proxies (Render, Heroku, etc.)
 
     ///----ADD CHECKING MIDDLEWARE FOR SECURE COOKIES -----///
     this.app.use((req, res, next) => {
@@ -76,6 +76,7 @@ export class Server {
             maxAge: 24 *60 *60 * 1000,
             httpOnly:true,
             path:'/',
+            domain: this.isProduction ? 'rematesargentina.onrender.com' : undefined
 
         }
     }
@@ -98,7 +99,17 @@ export class Server {
             extended:true
         }))
         this.app.use(cors({
-            origin:['http://localhost:5173', 'https://rematesargentina.vercel.app'],
+            origin: (origin, callback) => {
+            const allowedOrigins = [
+           'http://localhost:5173',
+           'https://rematesargentina.vercel.app'
+               ];
+              if (!origin || allowedOrigins.includes(origin)) {
+              callback(null, true);
+              } else {
+                  callback(new Error('Not allowed by CORS'));
+              }
+            },
             credentials:true
         }))
         
