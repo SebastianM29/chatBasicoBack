@@ -30,23 +30,7 @@ export class Server {
     if (this.isProduction) {
     this.app.set('trust proxy', 1); // importante para que secure cookies funcionen detrás de proxies (Render, Heroku, etc.)
 
-    ///----ADD CHECKING MIDDLEWARE FOR SECURE COOKIES -----///
-    this.app.use((req, res, next) => {
-        // Verifica si la solicitud llegó a través de HTTPS (la bandera 'secure' en Express es fiable si 'trust proxy' está en true)
-        const isSecure = req.secure || req.headers['x-forwarded-proto'] === 'https';
-        
-        // Verifica si la sesión existe y si la conexión es segura
-        if (req.session && req.session.cookie && isSecure) {
-            
-            // Re-establece las opciones de la cookie de sesión para forzar SameSite=None
-            req.session.cookie.secure = true;
-            req.session.cookie.sameSite = 'none';
-
-            // Este paso es a menudo redundante si la configuración inicial ya era correcta,
-            // pero asegura que las propiedades no se borren en el camino.
-        }
-        next();
-    });
+   
 
 
 
@@ -114,6 +98,26 @@ export class Server {
         }))
         
         this.app.use(this.sessionMiddleware)
+
+         ///----ADD CHECKING MIDDLEWARE FOR SECURE COOKIES -----///
+    this.app.use((req, res, next) => {
+        // Verifica si la solicitud llegó a través de HTTPS (la bandera 'secure' en Express es fiable si 'trust proxy' está en true)
+        const isSecure = req.secure || req.headers['x-forwarded-proto'] === 'https';
+        
+        // Verifica si la sesión existe y si la conexión es segura
+        if (req.session && req.session.cookie && isSecure) {
+            
+            // Re-establece las opciones de la cookie de sesión para forzar SameSite=None
+            req.session.cookie.secure = true;
+            req.session.cookie.sameSite = 'none';
+
+            // Este paso es a menudo redundante si la configuración inicial ya era correcta,
+            // pero asegura que las propiedades no se borren en el camino.
+        }
+        next();
+    });
+
+
         this.app.use(passport.initialize())
         this.app.use(passport.session())
 
