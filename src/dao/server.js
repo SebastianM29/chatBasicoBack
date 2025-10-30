@@ -72,7 +72,6 @@ export class Server {
     this.configureSocket()
     this.routes()
     this.socket()
-    this.connectingDB()
     
     }
     
