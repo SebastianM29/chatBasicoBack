@@ -54,7 +54,7 @@ export class Server {
             sameSite: this.isProduction ?'none' :'lax',
             maxAge: 24 *60 *60 * 1000,
             httpOnly:true,
-            path:'/'
+            path:'/',
 
         }
     }
